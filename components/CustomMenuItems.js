@@ -4,7 +4,6 @@ import {
 } from 'react-native-popup-menu';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-
 export const MenuItems = ({text, action, value, icon})=>{
     return(
         <MenuOption onSelect={()=>{ action(value)}}>

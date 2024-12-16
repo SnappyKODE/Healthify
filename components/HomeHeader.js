@@ -8,7 +8,6 @@ import { blurhash } from '../utils/common';
 import {
     Menu,
     MenuOptions,
-    MenuOption,
     MenuTrigger,
   } from 'react-native-popup-menu';
 import { MenuItems } from './CustomMenuItems';
@@ -36,9 +35,7 @@ export default function HomeHeader() {
             <View>
                 <Text  style={{fontSize: hp(3)}} className="font-medium text-white ">Home</Text>
             </View>
-
             <View>
-
             <Menu>
                 <MenuTrigger>
                     <Image
@@ -48,9 +45,6 @@ export default function HomeHeader() {
                         transition={500}
                     />
                 </MenuTrigger>
-
-               
-
                 <MenuOptions
                     customStyles={{
                         optionsContainer:{
@@ -68,7 +62,7 @@ export default function HomeHeader() {
                         value={null}
                         icon={<Feather name='user' color="#373737" size={hp(2.5)} />}
                     />
-                     <View className='p-[1px] w-full bg-neutral-200'></View>
+                    <View className='p-[1px] w-full bg-neutral-200'></View>
                     <MenuItems 
                         text="Logout"
                         action={handleLogout}
@@ -77,7 +71,6 @@ export default function HomeHeader() {
                     />
                 </MenuOptions>
             </Menu>
-
             </View>
         </View>
     )

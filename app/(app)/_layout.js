@@ -1,11 +1,6 @@
-import { Stack } from 'expo-router'
 import { Text, View , Platform} from 'react-native'
-import HomeHeader from '../../components/HomeHeader'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 import Home from './home.js'
-import { Feather, MaterialIcons } from '@expo/vector-icons';
 import Profile from './Profile.js';
 import Trends from './Trends.js';
 import Sleep from './Sleep.js';
@@ -24,7 +19,6 @@ export default function _layout() {
                 height:60,
                 elevation: 5,
                 position: 'absolute',
-
             },
             tabBarShowLabel: true,
             headerShown: true,
@@ -67,7 +61,7 @@ export default function _layout() {
                 }}
             />
 
-            <Tab.Screen
+            {/* <Tab.Screen
                 name='HeartModal'
                 component={HeartModal}
                 options={{
@@ -83,8 +77,7 @@ export default function _layout() {
                         </View>
                     )
                 }}
-            />
-
+            /> */}
 
             <Tab.Screen
                 name='Steps'
@@ -126,32 +119,7 @@ export default function _layout() {
                     )
                 }}
             />
-
-
-
-
         </Tab.Navigator>
     )
-    // <NavigationIndependentTree>
-    //     <NavigationContainer>
-    //     <Tab.Navigator   >
-    //         <Tab.Screen
-    //             name="home"
-    //             component={Home}
-    //             options={{tabBarIcon:()=>(
-    //             <Feather name='home' color="black" size={25}/>
-    //             )}}
-    //         />
-    //         {/* <Tab.Screen 
-    //             name="Settings" 
-    //             component={Med}
-    //             options={{tabBarIcon:()=>(
-    //             <Feather name='settings' color="black" size={25} />
-    //             )}}
-    //             /> */}
-    //     </Tab.Navigator>
-    //   </NavigationContainer>
-    // </NavigationIndependentTree>
-      
     
 }

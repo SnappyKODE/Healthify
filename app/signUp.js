@@ -83,19 +83,7 @@ export default function SignUp() {
                     secureTextEntry
                   />
               </View>
-
-              {/* <View style={{height:hp(7)}} className="flex-row gap-4 px-4 bg-neutral-100 items-center rounded-2xl">
-                <Feather name='image' color="gray" size={hp(2.7)} />
-                <TextInput
-                  onChangeText={value=> profileRef.current = value}
-                  style={{fontSize:hp(2)}}
-                  className="flex-1 font-semibold text-neutral-700"
-                  placeholder='Profile url'
-                  placeholderTextColor="gray"
-                />
-              </View> */}
                 
-
               <View>
                 {
                   loading ? (

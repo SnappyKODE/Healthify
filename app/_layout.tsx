@@ -5,8 +5,6 @@ import { AuthContextProvider, useAuth } from '../context/authContext';
 import { useEffect, useReducer } from 'react';
 import { MenuProvider } from 'react-native-popup-menu';
 
-
-
 const MainLayout=()=>{
   const {isAuthenticated}= useAuth();
   const segment = useSegments();

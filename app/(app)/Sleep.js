@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View , TouchableOpacity , SafeAreaView, Pressable} from 'react-native';
-import { Pedometer } from 'expo-sensors';
+import { Text, View , Pressable} from 'react-native';;
 import { Accelerometer } from 'expo-sensors';
-import { Constants } from 'expo-constants'
-import { blurhash } from '../../utils/common';
-import Under_C_Image from '../../assets/images/Under construction.png'
 import { ProgressChart } from 'react-native-chart-kit';
-import { LineChart } from "react-native-chart-kit";
 import { useAuth } from "../../context/authContext";
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from "expo-image";
+import { blurhash } from '../../utils/common';
+import walk from '../../assets/images/Running.png'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-export default function Sleep(){
+export default function Sleep({onClose, modal}){
 
     const [steps, setSteps] = useState(0)
     const [isCounting, setIsCounting] = useState(false)
@@ -17,6 +17,7 @@ export default function Sleep(){
     const [lastTimestamp, setLastTimestamp]= useState(0)
     const [stepTarget, setStepTarget] = useState(100)
     const {user, setStep , getStep} = useAuth()
+    
 
     const chartConfig = {
         backgroundGradientFrom: "#ffffff",
@@ -30,12 +31,9 @@ export default function Sleep(){
         const userId = user?.userId; // Replace with how you get the user ID
         const sdata = await getStep(userId);
         // setSteps(w)
-        console.log(sdata)
+        // console.log(sdata)
       };
 
-    // useEffect(()=>{
-    //     fetchStepData();
-    // },[])
 
 
     useEffect(()=>{
@@ -84,9 +82,16 @@ export default function Sleep(){
     return(
         <View className='flex-1 items-center bg-neutral-100 p-4'>
 
+            {
+                modal && (
+                    <Pressable className='flex items-end w-full py-3' onPress={() => onClose()}>
+                        <Ionicons name='close' size={35}/>
+                    </Pressable>
+                )
+            }
+
             <View className='bg-white items-center p-3 w-full rounded-xl elevation-md'>
                 <Text className='text-xl py-4'>You have walked {steps} steps today. </Text>
-
                 <ProgressChart
                     data={{labels:[],data:[steps/stepTarget]}}
                     chartConfig={chartConfig}
@@ -98,7 +103,7 @@ export default function Sleep(){
                 />
             </View>
             <View className='flex-row mt-4 justify-between'>
-                <View className='bg-white items-center p-2 w-48 rounded-xl elevation-md'>
+                <View className='bg-white items-center p-2 mr-4 w-48 rounded-xl elevation-md'>
                     <Text className='border-b-2 text-lg font-bold text-neutral-500 border-x-neutral-500 mb-3'>Today's Steps </Text>
                     <Text className='text-xl font-extrabold mb-2'>{steps}</Text>
                 </View>
@@ -108,7 +113,7 @@ export default function Sleep(){
                 </View>
             </View>
             <View className='flex-row mt-4 justify-between'>
-                <View className='bg-white items-center p-2 w-48 rounded-xl elevation-md'>
+                <View className='bg-white items-center p-2 mr-4 w-48 rounded-xl elevation-md'>
                     <Text className='border-b-2 text-lg font-bold text-neutral-500 border-x-neutral-500 mb-3'>Calories(in cal) </Text>
                     <Text  className='text-xl font-extrabold mb-2'>{(steps * 0.05).toFixed(2) }</Text>
                 </View>
@@ -117,7 +122,22 @@ export default function Sleep(){
                     <Text className='text-xl font-extrabold mb-2'> {(steps * 0.76).toFixed(2)}</Text>
                 </View>
             </View>
-
+            
+            {
+                !modal && (
+                    <View className='-mt-10'>
+                    <Image
+                            style={{width:wp(65),aspectRatio: 1,}}
+                            
+                            source={walk}
+                            placeholder={{ blurhash }}
+                            contentFit="cover"
+                            transition={1000}
+                        />
+                        </View>
+                )
+            }
+            
         </View>
     )
 }

@@ -2,7 +2,7 @@ import {View, Text, ScrollView, Pressable} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import Female from '../../assets/images/female-avatar.svg'
+import Female from '../../assets/images/male-avatar.svg'
 import { blurhash } from '../../utils/common';
 import {useAuth} from '../../context/authContext'
 
@@ -90,7 +90,7 @@ export default function Profile(){
                         <Ionicons name='information-circle-outline' size={hp(3)} /> 
                         <Text className=''>Version </Text>
                     </View>
-                    <Text className='text-center'>~ 1.0.0.1 </Text>
+                    <Text className='text-center'>~ 1.0.1.2 </Text>
                 </Pressable>
             </View>
         </ScrollView>

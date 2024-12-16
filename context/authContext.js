@@ -88,11 +88,9 @@ export const AuthContextProvider = ({children})=>{
                     "weight": arrayRemove(wdata[0]), 
                 })
             }
-
             await updateDoc(docRef, {
                 "weight" :  arrayUnion(value)
             });
-
             return {success: true,value}
         } catch (e) {
             let msg = e.message;
@@ -112,8 +110,6 @@ export const AuthContextProvider = ({children})=>{
                 wdate.push(element.date)
                 w.push(element.weight)
             });
-            // console.log("dates are "+ wdate)
-            // console.log("ws are "+ w)
             return {wdate,w}
         }
         

@@ -1,48 +1,40 @@
-import React, { useRef, useState , useEffect} from "react";
+import React, { useState , useEffect} from "react";
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
-  Dimensions,
-  Alert,
   ScrollView,
-  Pressable
+  Pressable,
+  Modal
 } from "react-native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
-import { LineChart } from "react-native-chart-kit";
 import { useAuth } from "../../context/authContext";
-
-import HealthGraph from "../../components/HealthGraph";
-import HomeHeader from '../../components/HomeHeader'
-import { Image } from "expo-image";
-import { blurhash } from '../../utils/common';
 import BP_measure from '../../assets/images/BP_measure.png'
 import Blood_sugar_measure from '../../assets/images/Blood_sugar_measure.png'
 import Weight_measure from '../../assets/images/weight_measure.png'
 import Step_counter from '../../assets/images/Step_counter.png'
-
-
-
-// const chartConfig = {
-//   backgroundGradientFrom: '#f3f4f6',
-//   backgroundGradientTo: '#f3f4f6',
-//   color: (opacity = 1) => `rgba(0, 50, 200, ${opacity})`,
-//   labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-//   strokeWidth: 2, // optional, default 3
-//   barPercentage: 0.5,
-//   propsForBackgroundLines: {
-//     strokeWidth: 0, // Removes grid lines
-//   },
-// };
-
-const screenWidth = (Dimensions.get('window').width)-20;
+import Home_Block from "../../components/ui/Home_Block";
+import Height_Measure from "../../components/Height_Measure";
+import BP_Measure from '../../components/BP_Measure'
+import BS_Measure from '../../components/BS_Measure'
+import Sleep from './Sleep'
+import { Image } from "expo-image";
+import { blurhash } from '../../utils/common';
+import Bottom_img from '../../assets/images/bt.png'
 
 
 export default function Home() {
 
   const {user} = useAuth();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [mtype, setMtype] = useState()
+
+  const handleClose = ()=>{
+    setModalVisible(!modalVisible);
+  }
+  const handleOpen =(type)=>{
+    setModalVisible(true)
+    setMtype(type)
+  }
 
     return (
       <ScrollView className="flex-1 bg-neutral-100 p-4">
@@ -52,57 +44,54 @@ export default function Home() {
           <Text className="text-2xl pl-2 text-neutral-100">{user?.username}</Text>
         </View>
 
+        <View className="flex-row justify-between mb-4 ">
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+          >
+            {
+              mtype == "BP" ? 
+              <BP_Measure  onClose={handleClose}/> : mtype == 'BS' ? 
+              <BS_Measure onClose={handleClose}/> : mtype == 'W' ? 
+              <Height_Measure onClose={handleClose}/> : <Sleep onClose={handleClose} modal="true"/>
+            }
+        </Modal>
         
+        <Pressable  onPress={() => handleOpen("BP")}>
+          <Home_Block img={BP_measure} title="Blood Pressure" content="Monitor heart health" />
+        </Pressable>
+
+        <Pressable onPress={() => handleOpen("BS")}>
+          <Home_Block img={Blood_sugar_measure} title="Blood Sugar" content="Track Glucose Levels" />
+        </Pressable>
+
+        </View>
 
         <View className="flex-row justify-between mb-4 ">
-          <Pressable style={{width:wp(45), height:hp(18)}} className="bg-white rounded-2xl elevation-sm p-3">
-            <Text className="text-xl font-extrabold">Blood Pressure</Text>
-            <Text className="text-sm font-semibold text-neutral-400">Monitor heart health </Text>
-            <Image
-              style={{width:wp(22),aspectRatio: 1,}}
-              source={BP_measure}
-              placeholder={{ blurhash }}
-              contentFit="cover"
-              transition={1000}
-            />
+          <Pressable  onPress={() => handleOpen("W")}>
+            <Home_Block img={Weight_measure} title="Weight" content="Keep check on weight" />
           </Pressable>
-          <Pressable style={{width:wp(45), height:hp(18)}} className="bg-white rounded-2xl elevation-sm p-3">
-            <Text className="text-xl font-extrabold">Blood Sugar</Text>
-            <Text className="text-sm font-semibold text-neutral-400">Track Glucose Levels </Text>
-            <Image
-              style={{width:wp(22),aspectRatio: 1,}}
-              source={Blood_sugar_measure}
-              placeholder={{ blurhash }}
-              contentFit="cover"
-              transition={1000}
-            />
+          
+          <Pressable onPress={() => handleOpen("S")}>
+            <Home_Block img={Step_counter} title="Step Counter" content="Exercise everyday" />
           </Pressable>
+          
         </View>
-        <View className="flex-row justify-between mb-4">
-          <Pressable style={{width:wp(45), height:hp(18)}} className="bg-white rounded-2xl elevation-sm p-3">
-            <Text className="text-xl font-extrabold">Weight</Text>
-            <Text className="text-sm font-semibold text-neutral-400">Keep check on weight </Text>
-            <Image
-              style={{width:wp(22),aspectRatio: 1,}}
-              source={Weight_measure}
-              placeholder={{ blurhash }}
-              contentFit="cover"
-              transition={1000}
+
+        <View className="flex justify-center items-center ">
+        <Image
+                style={{width:wp(84),aspectRatio: 1,}}
+                source={Bottom_img}
+                placeholder={{ blurhash }}
+                contentFit="cover"
+                transition={1000}
             />
-          </Pressable>
-          <Pressable style={{width:wp(45), height:hp(18)}} className="bg-white rounded-2xl elevation-sm p-3">
-            <Text className="text-xl font-extrabold">Step Counter </Text>
-            <Text className="text-sm font-semibold text-neutral-400">Exercise everyday </Text>
-            <Image
-              style={{width:wp(22),aspectRatio: 1,}}
-              source={Step_counter}
-              placeholder={{ blurhash }}
-              contentFit="cover"
-              transition={1000}
-            />
-          </Pressable>
         </View>
-        
+
       </ScrollView>
     )
 }
