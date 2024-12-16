@@ -8,9 +8,9 @@ import HealthGraph from "../../components/HealthGraph";
 export default function Trends(){
     return(
         <ScrollView className="p-4  bg-neutral-100">
-            <HealthGraph title='Weight' unit='kg'/>
-            <HealthGraph title='Blood Pressure' unit='mmHg'/>
-            <HealthGraph title='Blood Sugar' unit='mmol/L'/>
+            <HealthGraph title='Weight' unit='kg' type="W"/>
+            <HealthGraph title='Blood Pressure' unit='mmHg' type="BP"/>
+            <HealthGraph title='Blood Sugar' unit='mg/DL' type="BS"/>
             <View className="p-10"></View>
         </ScrollView>
     )

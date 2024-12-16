@@ -1,18 +1,35 @@
-import {View, Text, ScrollView, Pressable} from 'react-native'
+import {View, Text, ScrollView, Pressable, Modal} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import Female from '../../assets/images/male-avatar.svg'
 import { blurhash } from '../../utils/common';
 import {useAuth} from '../../context/authContext'
+import { useState } from 'react';
+import Edit from '../../components/profile/Edit';
+import Notif from '../../components/profile/Notif';
+import Security from '../../components/profile/Security';
+import Help from '../../components/profile/Help';
+import About from '../../components/profile/About';
+import Policy from '../../components/profile/Policy';
 
 export default function Profile(){
 
     const {user, logout}= useAuth();
+     const [modalVisible, setModalVisible] = useState(false);
+     const [mtype, setMtype] = useState()
 
     const handleLogout = async ()=>{
         await logout();
     }
+
+    const handleClose = ()=>{
+        setModalVisible(!modalVisible);
+      }
+      const handleOpen =(type)=>{
+        setModalVisible(true)
+        setMtype(type)
+      }
 
     return(
         <ScrollView className='flex-1 bg-neutral-100 px-2'>
@@ -32,28 +49,28 @@ export default function Profile(){
 
             <View className='flex-1 bg-neutral-100 px-2'>
 
-                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between'>
+                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between' onPress={() => handleOpen("E")}>
                     <View className='flex-row gap-4 items-center'>
                         <Ionicons name='create-outline' size={hp(3)} /> 
                         <Text className=''>Edit Profile </Text>
                     </View>
                     <Ionicons name='chevron-forward-outline' size={hp(3)} className=''/> 
                 </Pressable>
-                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between'>
+                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between' onPress={() => handleOpen("N")}>
                     <View className='flex-row gap-4 items-center'>
                         <Ionicons name='notifications-outline' size={hp(3)} /> 
                         <Text className=''>Notifications </Text>
                     </View>
                     <Ionicons name='chevron-forward-outline' size={hp(3)} className=''/> 
                 </Pressable>
-                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between'>
+                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between' onPress={() => handleOpen("S")}>
                     <View className='flex-row gap-4 items-center'>
                         <Ionicons name='shield-checkmark-outline' size={hp(3)} /> 
                         <Text className=''>Security </Text>
                     </View>
                     <Ionicons name='chevron-forward-outline' size={hp(3)} className=''/> 
                 </Pressable>
-                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between'>
+                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between' onPress={() => handleOpen("H")}>
                     <View className='flex-row gap-4 items-center'>
                         <Ionicons name='help-circle-outline' size={hp(3)} /> 
                         <Text className=''>Help </Text>
@@ -71,14 +88,14 @@ export default function Profile(){
 
             <View className='flex-1 bg-neutral-100 px-2'>
                 <Text className='text-neutral-600 py-4 px-2'>About</Text>
-                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between'>
+                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between' onPress={() => handleOpen("A")}>
                     <View  className='flex-row gap-4 items-center'>
                         <Ionicons name='bug-outline' size={hp(3)} /> 
                         <Text className=''>About Dev </Text>
                     </View>
                     <Ionicons name='chevron-forward-outline' size={hp(3)} className=''/> 
                 </Pressable>
-                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between'>
+                <Pressable className='bg-white px-3 py-4  rounded-2xl mb-3 flex-row gap-4 justify-between' onPress={() => handleOpen("P")}>
                     <View className='flex-row gap-4 items-center'>
                         <Ionicons name='lock-closed-outline' size={hp(3)} /> 
                         <Text className=''>Privacy Policy </Text>
@@ -93,6 +110,25 @@ export default function Profile(){
                     <Text className='text-center'>~ 1.0.1.2 </Text>
                 </Pressable>
             </View>
+
+
+            <Modal
+            animationType="slide"
+            transparent={false}
+            visible={modalVisible}
+            onRequestClose={() => {
+                setModalVisible(!modalVisible);
+            }}
+            >
+            {
+                mtype == "E" ? 
+                <Edit/> : mtype == 'N' ? 
+                <Notif /> : mtype == 'S' ? 
+                <Security /> : mtype == 'H' ?
+                <Help/> :mtype =='A' ?
+                <About /> : <Policy />
+            }
+        </Modal>
         </ScrollView>
         
     )

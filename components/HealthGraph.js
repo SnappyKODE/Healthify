@@ -37,30 +37,64 @@ const chartConfig = {
   };
 
 
-export default function HealthGraph({title, unit}){
-    const {weightsInput, user, getWeights} = useAuth()
+export default function HealthGraph({title, unit, type}){
+    const {weightsInput, user, getWeights,getSugar , SugarInput,getPressure} = useAuth()
     const WeightInputRef = useRef("")
+    const SugarInputRef = useRef("")
+
     var date = new Date().getDate(); 
     var month = new Date().getMonth() + 1;
   
     const [weightData, setWeightData] = useState([])
-      const [data, setData] = useState({
-        labels: [{ data : [date]}],
-        datasets: [{ data: [0] }],
-      });
+    const [SugarData, setSugarData] = useState([])
+    const [PressureData, setPressureData] = useState([])
+
+    const [wdata, setWData] = useState({
+      labels: [{ data : [date]}],
+      datasets: [{ data: [0] }],
+    });
+    // const [sdata, setSData] = useState({
+    //   labels: [{ data : [date]}],
+    //   datasets: [{ data: [0] }],
+    // });
 
     useEffect(() => {
         const fetchWeightData = async () => {
           const userId = user?.userId; // Replace with how you get the user ID
-          const {wdate, w} = await getWeights(userId);
-          setWeightData(w); 
-          setData({
+          if(type == 'W'){
+            const {wdate, w} = await getWeights(userId);
+            setWeightData(w); 
+            setWData({
             labels: wdate,
             datasets: [{
               label: 'Weight', // Add a label for the dataset
               data: w, // Directly use the wd array for data
             }],
-          });
+            });
+          } else if(type == 'BS') {
+            const {sugardate, sugar} = await getSugar(userId);
+            setSugarData(sugar); 
+            setWData({
+            labels: sugardate,
+            datasets: [{
+              label: 'Blood Sugar', // Add a label for the dataset
+              data: sugar, // Directly use the wd array for data
+            }],
+            });
+          }else if(type == 'BP'){
+            const {pressuredate, pressure} = await getPressure(userId);
+            setPressureData(pressure); 
+            setWData({
+            labels: pressuredate,
+            datasets: [{
+              label: 'Blood Pressure', // Add a label for the dataset
+              data: pressure, // Directly use the wd array for data
+            }],
+            });
+          }else{
+
+          }
+          
         };
         fetchWeightData(); // Call the function to fetch data on mount
     }, );
@@ -72,7 +106,7 @@ export default function HealthGraph({title, unit}){
           <Text className="font-semibold text-sm - text-neutral-500">Unit: {unit}</Text>
           <View className="my-4 flex justify-center items-center">
             <LineChart 
-              data={data}
+              data={wdata}
               width={wp(90)}
               height={230}
               chartConfig={chartConfig}
@@ -82,6 +116,7 @@ export default function HealthGraph({title, unit}){
               segments={4}
               withInnerLines={false}
               className=""
+              fromZero={true}
             />
           </View>
         </View>

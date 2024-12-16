@@ -63,7 +63,18 @@ export const AuthContextProvider = ({children})=>{
             await setDoc(doc(db,"users", response?.user?.uid),{
                 username,
                 email,
-                weight : [0],
+                weight : {
+                    date: "0",
+                    weight: "0"
+                },
+                sugar : {
+                    date: "0",
+                    sugar: "0"
+                },
+                pressure: {
+                    date: "0",
+                    pressure: "0"
+                },
                 stepdata: 0,
                 userId: response?.user?.uid
             });
@@ -115,6 +126,82 @@ export const AuthContextProvider = ({children})=>{
         
     }
 
+    const SugarInput = async (value,userId)=>{
+        try {
+            const docRef = doc(db, 'users', userId);
+            const docSnap = await getDoc(docRef);
+            const data = docSnap.data();
+            const sugardata = data.sugar;
+            if(sugardata.length > 6){
+                await updateDoc(docRef, {
+                    "sugar": arrayRemove(sugardata[0]), 
+                })
+            }
+            await updateDoc(docRef, {
+                "sugar" :  arrayUnion(value)
+            });
+            return {success: true,value}
+        } catch (e) {
+            let msg = e.message;
+            return {success: false, msg};
+        }
+    }
+
+    const getSugar = async(userId)=>{
+        const docRef = doc(db, 'users', userId);
+        const docSnap = await getDoc(docRef);
+        if(docSnap.exists()){
+            const data = docSnap.data();
+            const sugardata = data.sugar;
+            const sugardate = [];
+            const sugar =[];
+            sugardata.forEach(element => {
+                sugardate.push(element.date)
+                sugar.push(element.sugar)
+            });
+            return {sugardate,sugar}
+        }
+        
+    }
+
+    const PressureInput = async (value,userId)=>{
+        try {
+            const docRef = doc(db, 'users', userId);
+            const docSnap = await getDoc(docRef);
+            const data = docSnap.data();
+            const pressuredata = data.pressure;
+            if(pressuredata.length > 6){
+                await updateDoc(docRef, {
+                    "pressure": arrayRemove(pressuredata[0]), 
+                })
+            }
+            await updateDoc(docRef, {
+                "pressure" :  arrayUnion(value)
+            });
+            return {success: true,value}
+        } catch (e) {
+            let msg = e.message;
+            return {success: false, msg};
+        }
+    }
+
+    const getPressure = async(userId)=>{
+        const docRef = doc(db, 'users', userId);
+        const docSnap = await getDoc(docRef);
+        if(docSnap.exists()){
+            const data = docSnap.data();
+            const pressuredata = data.pressure;
+            const pressuredate = [];
+            const pressure =[];
+            pressuredata.forEach(element => {
+                pressuredate.push(element.date)
+                pressure.push(element.pressure)
+            });
+            return {pressuredate,pressure}
+        }
+        
+    }
+
 
     const setStep = async (value,userId)=>{
         try {
@@ -145,7 +232,7 @@ export const AuthContextProvider = ({children})=>{
     }
 
     return(
-        <AuthContext.Provider value={{user, isAuthenticated, login, logout, register,weightsInput,getWeights,setStep,getStep}}>
+        <AuthContext.Provider value={{user, isAuthenticated, login, logout, register,weightsInput,getWeights,setStep,getStep,SugarInput,getSugar,PressureInput,getPressure}}>
             {children}
         </AuthContext.Provider>
     )

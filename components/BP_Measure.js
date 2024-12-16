@@ -7,12 +7,12 @@ import { useAuth } from "../context/authContext";
 
 export default function BP_Measure({onClose}){
 
-    const {weightsInput, user, getWeights} = useAuth()
-        const WeightInputRef = useRef("")
+    const {PressureInput, user, getPressure} = useAuth()
+        const PressureInputRef = useRef("")
         var date = new Date().getDate();
         var month = new Date().getMonth() + 1;
       
-        const [weightData, setWeightData] = useState([])
+        const [pressureData, setpressureData] = useState([])
           const [data, setData] = useState({
             labels: [{ data : [date]}],
             datasets: [{ data: [0] }],
@@ -20,33 +20,33 @@ export default function BP_Measure({onClose}){
 
       const handleInput = async()=>{
             
-            if(!WeightInputRef.current ){
-              Alert.alert("Weight Input", "Please fill the field");
+            if(!PressureInputRef.current ){
+              Alert.alert("Blood Pressure Input", "Please fill the field");
               return;
-            } else if( WeightInputRef.current > 200){
-              Alert.alert("Weight Input", "Please fill valid weight");
+            } else if( PressureInputRef.current > 200){
+              Alert.alert("Blood Pressure Input", "Please fill valid weight");
               return;
             }
     
             let value = {
               date : `${date}/${month}`,
-              weight : WeightInputRef.current
+              pressure : PressureInputRef.current
             }
         
-            let response = await weightsInput(value, user?.userId)
+            let response = await PressureInput(value, user?.userId)
             console.log(response)
             if(!response.success){
-              Alert.alert('Weight Input', response.msg)
+              Alert.alert('Blood Pressure Input', response.msg)
             }
         
-            let {wdate, w}= await getWeights(user?.userId)
-            console.log(wd)
+            let {pressuredate, pressure}= await getPressure(user?.userId)
+            console.log(pressuredate)
         
             setData({
-              labels: wdate,
+              labels: pressuredate,
               datasets: [{
-                label: 'Weight', // Add a label for the dataset
-                data: w, // Directly use the wd array for data
+                label: 'Blood Pressure', // Add a label for the dataset
+                data: pressure, // Directly use the wd array for data
               }],
             });
             
@@ -62,7 +62,7 @@ export default function BP_Measure({onClose}){
                 <Text className="font-semibold text-sm - text-neutral-500 mb-4">Unit: mmHg</Text>
                 <View className="border rounded-2xl p-2 bg-white">
                   <TextInput
-                    onChangeText={(value)=>{ WeightInputRef.current = value;}}
+                    onChangeText={(value)=>{ PressureInputRef.current = value;}}
                     keyboardType="numeric"
                     placeholderTextColor='gray'
                     placeholder="BP in mmHg"/>
@@ -72,7 +72,7 @@ export default function BP_Measure({onClose}){
                   <Text style={{fontSize: hp(2.2)}} className="text-white ml-1">Add </Text>
                 </TouchableOpacity>
             </View>
-            <HealthGraph title='Blood Pressure' unit='mmHg'/>
+            <HealthGraph title='Blood Pressure' unit='mmHg' type="BP"/>
         </View>
     )
 }

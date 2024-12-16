@@ -13,7 +13,7 @@ export default function Height_Measure({onClose}){
         var month = new Date().getMonth() + 1; //Current Month
     
         const [weightData, setWeightData] = useState([])
-          const [data, setData] = useState({
+          const [wdata, setWData] = useState({
             labels: [{ data : [date]}],
             datasets: [{ data: [0] }],
           });
@@ -42,7 +42,7 @@ export default function Height_Measure({onClose}){
             let {wdate, w}= await getWeights(user?.userId)
             console.log(wd)
 
-            setData({
+            setWData({
               labels: wdate,
               datasets: [{
                 label: 'Weight', // Add a label for the dataset
@@ -71,7 +71,7 @@ export default function Height_Measure({onClose}){
                 <Text style={{fontSize: hp(2.2)}} className="text-white ml-1">Add </Text>
               </TouchableOpacity>
             </View>
-            <HealthGraph title='Weight' unit='kg'/>
+            <HealthGraph title='Weight' unit='kg' type="W"/>
         </View>
     )
 }

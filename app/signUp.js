@@ -6,6 +6,7 @@ import { useRef, useState } from 'react';
 import Loading from "../components/Loading"
 import CustomKeyboardView from '../components/CustomKeyboardView'
 import { useAuth } from '../context/authContext';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function SignUp() {
@@ -13,6 +14,7 @@ export default function SignUp() {
   const router = useRouter();
   const {register} = useAuth()
   const [loading, setLoading]= useState(false)
+  const [eye, setEye] = useState(true)
 
   const emailRef = useRef("");
   const passwordRef = useRef("");
@@ -80,8 +82,12 @@ export default function SignUp() {
                     className="flex-1 font-semibold text-neutral-700"
                     placeholder='Password'
                     placeholderTextColor="gray"
-                    secureTextEntry
+                    secureTextEntry = {eye}
                   />
+                  <Pressable onPress={()=>setEye(!eye)}>
+                    <Ionicons name={eye ? 'eye-outline' : 'eye-off-outline'} color="gray" size={hp(2.7)}  />
+                  </Pressable>
+                  
               </View>
                 
               <View>

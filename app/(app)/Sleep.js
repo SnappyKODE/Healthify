@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Text, View , Pressable} from 'react-native';;
+import { Text, View , Pressable,Modal} from 'react-native';;
 import { Accelerometer } from 'expo-sensors';
 import { ProgressChart } from 'react-native-chart-kit';
 import { useAuth } from "../../context/authContext";
@@ -17,6 +17,7 @@ export default function Sleep({onClose, modal}){
     const [lastTimestamp, setLastTimestamp]= useState(0)
     const [stepTarget, setStepTarget] = useState(100)
     const {user, setStep , getStep} = useAuth()
+    const [isPromptActive, setIsPromptActive] = useState(false);
     
 
     const chartConfig = {
@@ -109,7 +110,13 @@ export default function Sleep({onClose, modal}){
                 </View>
                 <View className='bg-white items-center p-2 w-48 rounded-xl elevation-md'>
                     <Text className='border-b-2 text-lg font-bold text-neutral-500 border-x-neutral-500 mb-3'>Daily Target </Text>
-                    <Text  className='text-xl font-extrabold mb-2'>{stepTarget}</Text>
+                    <View className='flex-row gap-4'>
+                        <Text  className='text-xl font-extrabold mb-2'>{stepTarget}</Text>
+                        <Pressable>
+                            <Ionicons name='create-outline' size={hp(3)} color={'#3b82f6'}/>
+                        </Pressable>
+                    </View>
+                    
                 </View>
             </View>
             <View className='flex-row mt-4 justify-between'>
