@@ -3,6 +3,7 @@ import Loading from '../components/Loading'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
+
 export default function StartPage() {
 
     return (
